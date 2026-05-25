@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notificação Extrajudicial – Projetar Imóveis</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root{--vinho:#A0496A;--vinho-dark:#7a3250;--vinho-light:#c4768f;--vinho-pale:#f9eef2;--gold:#c9a96e;--text:#1e1e1e;--text-muted:#6b6b6b;--border:#ddd0d5;--bg:#faf8f8;--white:#ffffff;--radius:10px;--shadow:0 2px 16px rgba(160,73,106,0.10);}
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:40px 16px 60px;}
+    .wrapper{max-width:720px;margin:0 auto;}
+    .header{background:var(--vinho);border-radius:var(--radius) var(--radius) 0 0;padding:32px 36px 24px;display:flex;align-items:center;gap:20px;position:relative;overflow:hidden;}
+    .header::after{content:'';position:absolute;right:-30px;top:-30px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.06);}
+    .logo-name{font-weight:800;font-size:22px;color:#fff;letter-spacing:0.5px;line-height:1;}
+    .logo-name span{color:var(--gold);}
+    .logo-sub{font-family:'Lora',serif;font-style:italic;font-size:11px;color:rgba(255,255,255,0.7);margin-top:4px;letter-spacing:1px;}
+    .header-title{margin-left:auto;text-align:right;}
+    .header-title h1{font-size:15px;font-weight:700;color:#fff;letter-spacing:1.5px;text-transform:uppercase;}
+    .header-title p{font-size:11px;color:rgba(255,255,255,0.65);margin-top:4px;font-family:'Lora',serif;font-style:italic;}
+    .accent-bar{height:4px;background:linear-gradient(90deg,var(--gold),var(--vinho-light));}
+    .card{background:var(--white);border-radius:0 0 var(--radius) var(--radius);box-shadow:var(--shadow);padding:36px 36px 40px;}
+    .section{margin-bottom:32px;}
+    .section-title{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--vinho);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+    .section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+    .field{display:flex;flex-direction:column;gap:6px;}
+    label{font-size:11px;font-weight:600;color:var(--text-muted);letter-spacing:0.5px;text-transform:uppercase;}
+    input[type="text"]{border:1.5px solid var(--border);border-radius:7px;padding:10px 13px;font-family:'Montserrat',sans-serif;font-size:13.5px;color:var(--text);background:var(--white);transition:border-color .2s,box-shadow .2s;outline:none;width:100%;}
+    input:focus{border-color:var(--vinho);box-shadow:0 0 0 3px rgba(160,73,106,0.12);}
+    .radio-group{display:flex;gap:12px;flex-wrap:wrap;margin-top:2px;}
+    .radio-label{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;font-weight:600;color:var(--text);text-transform:none;letter-spacing:0;padding:8px 16px;border:1.5px solid var(--border);border-radius:50px;transition:all .2s;user-select:none;}
+    .radio-label:hover{border-color:var(--vinho-light);background:var(--vinho-pale);}
+    .radio-label input{display:none;}
+    .radio-label.selected{border-color:var(--vinho);background:var(--vinho-pale);color:var(--vinho-dark);}
+    .radio-dot{width:10px;height:10px;border-radius:50%;border:2px solid var(--border);background:#fff;flex-shrink:0;transition:all .2s;}
+    .radio-label.selected .radio-dot{background:var(--vinho);border-color:var(--vinho);}
+    .dynamic-block{display:none;margin-top:16px;padding:20px;background:var(--vinho-pale);border:1.5px solid var(--border);border-radius:var(--radius);animation:fadeIn .2s ease;}
+    .dynamic-block.visible{display:block;}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+    .pessoa-item{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end;margin-bottom:12px;}
+    .pessoa-item:last-child{margin-bottom:0;}
+    .btn-add{display:inline-flex;align-items:center;gap:7px;margin-top:14px;padding:8px 18px;border-radius:50px;border:1.5px dashed var(--vinho-light);background:transparent;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;color:var(--vinho);cursor:pointer;transition:all .2s;}
+    .btn-add:hover{background:var(--vinho-pale);border-color:var(--vinho);}
+    .btn-remove{padding:9px 13px;border-radius:7px;border:1.5px solid #e8c4ce;background:#fff0f4;color:var(--vinho);font-size:14px;cursor:pointer;transition:all .2s;line-height:1;}
+    .btn-remove:hover{background:#ffd6e0;border-color:var(--vinho);}
+    .actions{display:flex;justify-content:flex-end;gap:12px;margin-top:36px;padding-top:24px;border-top:1px solid var(--border);}
+    .btn-secondary{padding:12px 26px;border-radius:7px;border:1.5px solid var(--border);background:transparent;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;color:var(--text-muted);cursor:pointer;transition:all .2s;}
+    .btn-secondary:hover{border-color:var(--vinho);color:var(--vinho);}
+    .btn-primary{padding:12px 32px;border-radius:7px;border:none;background:var(--vinho);font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:#fff;cursor:pointer;letter-spacing:0.5px;transition:background .2s,transform .15s;}
+    .btn-primary:hover{background:var(--vinho-dark);transform:translateY(-1px);}
+    .footer{text-align:center;margin-top:24px;font-size:11px;color:var(--text-muted);font-family:'Lora',serif;font-style:italic;}
+    .toast{display:none;position:fixed;bottom:32px;right:32px;background:#2e7d52;color:#fff;padding:14px 24px;border-radius:10px;font-size:14px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,0.2);z-index:999;}
+    @media(max-width:560px){.card{padding:24px 18px 32px;}.header{padding:24px 20px;flex-direction:column;align-items:flex-start;gap:12px;}.header-title{margin-left:0;text-align:left;}}
+  </style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="header">
+    <div>
+      <div class="logo-name">PROJETAR <span>IMÓVEIS</span></div>
+      <div class="logo-sub">CRECI 2709J</div>
+    </div>
+    <div class="header-title">
+      <h1>Notificação Extrajudicial</h1>
+      <p>Controle interno – Uso exclusivo da equipe</p>
+    </div>
+  </div>
+  <div class="accent-bar"></div>
+  <div class="card">
+    <form id="fichaForm" novalidate>
+
+      <!-- DADOS DO INQUILINO -->
+      <div class="section">
+        <div class="section-title">Dados do Inquilino</div>
+        <div class="field">
+          <label>Código do Inquilino</label>
+          <input type="text" name="codigo_inquilino" placeholder="Código do inquilino" />
+        </div>
+      </div>
+
+      <!-- LOCATÁRIOS SOLIDÁRIOS -->
+      <div class="section">
+        <div class="section-title">Locatários Solidários</div>
+        <div class="field">
+          <label>Há locatários solidários?</label>
+          <div class="radio-group" data-name="tem_solidario" id="grupoSolidario">
+            <label class="radio-label"><input type="radio" name="tem_solidario" value="Sim" /><span class="radio-dot"></span> Sim</label>
+            <label class="radio-label"><input type="radio" name="tem_solidario" value="Não" /><span class="radio-dot"></span> Não</label>
+          </div>
+        </div>
+        <div class="dynamic-block" id="blocoSolidario">
+          <div id="listaSolidarios">
+            <div class="pessoa-item" id="solidario-1">
+              <div class="field">
+                <label>Código do Solidário 1</label>
+                <input type="text" name="codigo_solidario[]" placeholder="Código do locatário solidário" />
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn-add" onclick="adicionarItem('listaSolidarios','solidario','codigo_solidario[]','Solidário')">+ Adicionar solidário</button>
+        </div>
+      </div>
+
+      <!-- AÇÕES -->
+      <div class="actions">
+        <button type="button" class="btn-secondary" onclick="limparForm()">Limpar</button>
+        <button type="button" class="btn-secondary" onclick="window.print()">🖨 Imprimir</button>
+        <button type="submit" class="btn-primary">Enviar</button>
+      </div>
+
+    </form>
+  </div>
+  <div class="footer">Projetar Imóveis · CRECI 2709J · Av. Cel. João Fernandes, 546 – Urussanguinha – Araranguá/SC</div>
+</div>
+
+<div class="toast" id="toast">✓ Enviado com sucesso!</div>
+
+<script>
+  const contadores = {};
+
+  document.querySelectorAll('.radio-group').forEach(group => {
+    group.querySelectorAll('.radio-label').forEach(label => {
+      label.addEventListener('click', () => {
+        const groupName = group.dataset.name;
+        document.querySelectorAll(`[data-name="${groupName}"] .radio-label`).forEach(l => l.classList.remove('selected'));
+        label.classList.add('selected');
+        label.querySelector('input').checked = true;
+        const val = label.querySelector('input').value;
+        if (groupName === 'tem_solidario') {
+          document.getElementById('blocoSolidario').classList.toggle('visible', val === 'Sim');
+        }
+      });
+    });
+  });
+
+  function adicionarItem(listaId, prefixo, fieldName, label) {
+    if (!contadores[prefixo]) contadores[prefixo] = 1;
+    contadores[prefixo]++;
+    const n = contadores[prefixo];
+    const lista = document.getElementById(listaId);
+    const div = document.createElement('div');
+    div.className = 'pessoa-item';
+    div.id = `${prefixo}-${n}`;
+    div.innerHTML = `
+      <div class="field">
+        <label>Código do ${label} ${n}</label>
+        <input type="text" name="${fieldName}" placeholder="Código do ${label.toLowerCase()}" />
+      </div>
+      <button type="button" class="btn-remove" onclick="removerItem('${prefixo}-${n}')" title="Remover">✕</button>
+    `;
+    lista.appendChild(div);
+    div.querySelector('input').focus();
+  }
+
+  function removerItem(id) {
+    const el = document.getElementById(id);
+    if (el) el.remove();
+  }
+
+  document.getElementById('fichaForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const data = {};
+    new FormData(this).forEach((v, k) => {
+      if (k.endsWith('[]')) {
+        const key = k.slice(0, -2);
+        if (!data[key]) data[key] = [];
+        data[key].push(v);
+      } else {
+        data[k] = v;
+      }
+    });
+    try {
+      await fetch('https://dinastia-n8n-webhook.saxddq.easypanel.host/webhook/a9264d7a-97f4-4b5d-9532-1acb1aa3a3d0', {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify(data)
+      });
+      showToast();
+    } catch (err) {
+      alert('Erro de conexão com o servidor.');
+    }
+  });
+
+  function showToast() {
+    const t = document.getElementById('toast');
+    t.style.display = 'block';
+    setTimeout(() => { t.style.display = 'none'; }, 3500);
+  }
+
+  function limparForm() {
+    if (!confirm('Deseja limpar todos os campos?')) return;
+    document.getElementById('fichaForm').reset();
+    document.querySelectorAll('.radio-label').forEach(l => l.classList.remove('selected'));
+    document.querySelectorAll('.dynamic-block').forEach(b => b.classList.remove('visible'));
+    const lista = document.getElementById('listaSolidarios');
+    while (lista.children.length > 1) lista.removeChild(lista.lastChild);
+    Object.keys(contadores).forEach(k => delete contadores[k]);
+  }
+</script>
+</body>
+</html>
