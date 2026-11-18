@@ -76,6 +76,11 @@
           <label>Código do Inquilino</label>
           <input type="text" name="codigo_inquilino" placeholder="Código do inquilino" />
         </div>
+        <div class="field">
+          <label>Número do Contrato</label>
+          <input type="text" name="codigo_contrato" inputmode="numeric" placeholder="Número do contrato no Imoview" />
+          <span style="display:block;font-size:12px;color:#8a8a8a;margin-top:4px">Obrigatório. É o número do contrato, não o do imóvel. Com ele o documento sai mesmo se o contrato já estiver rescindido.</span>
+        </div>
       </div>
 
       <!-- LOCATÁRIOS SOLIDÁRIOS -->
@@ -169,6 +174,11 @@
         data[k] = v;
       }
     });
+    if (!data.codigo_contrato || !String(data.codigo_contrato).trim()) {
+      alert('Informe o Número do Contrato. Ele aparece na tela do contrato no Imoview e é o que permite gerar o documento mesmo com o contrato já rescindido.');
+      return;
+    }
+
     try {
       await fetch('https://dinastia-n8n-webhook.saxddq.easypanel.host/webhook/a9264d7a-97f4-4b5d-9532-1acb1aa3a3d0', {
         method: 'POST',
